@@ -2,12 +2,14 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from .utils import unique_category_image_path, unique_gallery_image_path
+
 
 class Category(models.Model):
     """Модель категории товаров"""
 
     title = models.CharField(max_length=150, verbose_name='Наименование категории')
-    image = models.ImageField(upload_to='categories/', null=True, verbose_name='Изображение')
+    image = models.ImageField(upload_to=unique_category_image_path, null=True, blank=True, verbose_name='Изображение')
     slug = models.SlugField(unique=True, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
                                verbose_name='Категория', related_name='subcategories')
@@ -56,7 +58,7 @@ class Product(models.Model):
 
 class Gallery(models.Model):
     """Модель для организации картинок у продукта"""
-    image = models.ImageField(upload_to='products/', verbose_name='Изображение')
+    image = models.ImageField(upload_to=unique_gallery_image_path, verbose_name='Изображение')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
     class Meta:
