@@ -16,10 +16,10 @@
 <div class="page-holder">
     <!-- navbar-->
     {% include 'components/_navbar.html' %}
-    <!--  Modal -->
-    {% include 'components/_modal.html' %}
-    <!-- HERO SECTION-->
-    {% include 'components/_hero.html' %}
+
+    {% block main %}
+    {% endblock main %}
+
     <!-- Footer-->
     {% include 'components/_footer.html' %}
     <!-- JavaScript files-->
