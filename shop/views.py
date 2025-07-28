@@ -15,3 +15,18 @@ class Index(ListView):
         """Вывод родительской категории"""
         categories = Category.objects.filter(parent=None)
         return categories
+
+
+class CategoryProductsView(ListView):
+    """Вывод подкатегорий на отдельной странице"""
+    model = Product
+    context_object_name = 'products'
+    extra_context = {'title': 'Дочерние категории'}
+    template_name = 'shop/category_page.html'
+
+    def get_queryset(self):
+        """Получить все товары подкатегории"""
+        parent_category = Category.objects.get(slug=self.kwargs['slug'])
+        subcategories = parent_category.subcategories.all()
+        products = Product.objects.filter(category__in=subcategories).order_by('?')
+        return products

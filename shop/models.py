@@ -22,7 +22,8 @@ class Category(models.Model):
         return f"Категория: pk={self.pk}, title={self.title}"
 
     def get_absolute_url(self):
-        pass
+        """Ссылка на страницу родительской категории"""
+        return reverse('category_detail', kwargs={'slug': self.slug})
 
     def get_parent_category_image_or_default(self):
         """Получение картинки родительской категории"""
@@ -52,6 +53,12 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         pass
+
+    def get_first_image_or_default(self):
+        if self.images.exists():
+            return self.images.first().image.url
+
+        return static('shop/img/net-kartinki.jpg')
 
     def __str__(self):
         return self.title
