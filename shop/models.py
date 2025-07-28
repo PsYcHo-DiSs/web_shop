@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.templatetags.static import static
 from django.contrib.auth.models import User
 
 from .utils import unique_category_image_path, unique_gallery_image_path
@@ -14,14 +15,21 @@ class Category(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
                                verbose_name='Категория', related_name='subcategories')
 
-    def get_absolute_url(self):
-        pass
-
     def __str__(self):
         return self.title
 
     def __repr__(self):
         return f"Категория: pk={self.pk}, title={self.title}"
+
+    def get_absolute_url(self):
+        pass
+
+    def get_parent_category_image_or_default(self):
+        """Получение картинки родительской категории"""
+        if self.image:
+            return self.image.url
+
+        return static('shop/img/net-kartinki.jpg')
 
     class Meta:
         verbose_name = 'Категория'
