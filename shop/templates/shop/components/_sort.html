@@ -1,11 +1,19 @@
+{% load shop_tags %}
+{% load cache %}
+
+{% get_subcategories category as subcategories %}
+
 <div class="py-2 px-4 bg-dark text-white mb-3">
     <strong class="small text-uppercase fw-bold">
-        Fashion&amp; Acc
+        Подкатегории: {{ category }}
     </strong>
 </div>
 <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
+    {% for subcategory in subcategories %}
     <li class="mb-2">
-        <a class="reset-anchor" href="#!">Women's T-Shirts
+        <a class="reset-anchor" href="?type={{ subcategory.slug }}">
+            {{ subcategory }}
         </a>
     </li>
+    {% endfor %}
 </ul>

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
+from django.core.cache import cache
 
 from .models import Category, Product
 
@@ -19,8 +20,15 @@ class Index(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Вывод на страничку дополнительных элементов из 8 самых популярных товаров"""
         context = super().get_context_data()
-        context['top_products'] = Product.objects.order_by('-watched')[:8]
+
+        top_products = cache.get('top_products')
+        if top_products is None:
+            top_products = Product.objects.order_by('-watched')[:8]
+            cache.set('top_products', top_products, timeout=60)  # кеш на 60 секунд
+
+        context['top_products'] = top_products
         return context
+
 
 class CategoryProductsView(ListView):
     """Вывод подкатегорий на отдельной странице"""
@@ -33,5 +41,19 @@ class CategoryProductsView(ListView):
         """Получить все товары подкатегории"""
         parent_category = Category.objects.get(slug=self.kwargs['slug'])
         subcategories = parent_category.subcategories.all()
-        products = Product.objects.filter(category__in=subcategories).order_by('?')
+
+        type_field = self.request.GET.get('type')
+        if type_field:
+            products = Product.objects.filter(category__slug=type_field)
+        else:
+            products = Product.objects.filter(category__in=subcategories).order_by('?')
+
         return products
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Дополнительные элементы в виде категории"""
+        context = super().get_context_data()
+        parent_category = Category.objects.get(slug=self.kwargs['slug'])
+        context['category'] = parent_category
+        context['title'] = parent_category.title
+        return context
