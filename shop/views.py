@@ -37,10 +37,13 @@ class CategoryProductsView(ListView):
     extra_context = {'title': 'Дочерние категории'}
     template_name = 'shop/category_page.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.parent_category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         """Получить все товары подкатегории"""
-        parent_category = Category.objects.get(slug=self.kwargs['slug'])
-        subcategories = parent_category.subcategories.all()
+        subcategories = self.parent_category.subcategories.all()
 
         type_field = self.request.GET.get('type')
         if type_field:
@@ -53,7 +56,7 @@ class CategoryProductsView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Дополнительные элементы в виде категории"""
         context = super().get_context_data()
-        parent_category = Category.objects.get(slug=self.kwargs['slug'])
+        parent_category = self.parent_category
         context['category'] = parent_category
         context['title'] = parent_category.title
         return context
