@@ -38,18 +38,21 @@ class CategoryProductsView(ListView):
     template_name = 'shop/category_page.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.parent_category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        self.parent_category = get_object_or_404(Category, slug=self.kwargs['slug'])  # noqa
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         """Получить все товары подкатегории"""
         subcategories = self.parent_category.subcategories.all()
 
-        type_field = self.request.GET.get('type')
-        if type_field:
+        if type_field := self.request.GET.get('type'):
             products = Product.objects.filter(category__slug=type_field)
-        else:
-            products = Product.objects.filter(category__in=subcategories).order_by('?')
+            return products
+
+        products = Product.objects.filter(category__in=subcategories).order_by('?')
+
+        if sort_field := self.request.GET.get('sort'):
+            products = products.order_by(sort_field)
 
         return products
 

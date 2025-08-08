@@ -2,6 +2,7 @@
 {% load cache %}
 
 {% get_subcategories category as subcategories %}
+{% get_sorted as data %}
 
 <div class="py-2 px-4 bg-dark text-white mb-3">
     <strong class="small text-uppercase fw-bold">
@@ -17,3 +18,20 @@
     </li>
     {% endfor %}
 </ul>
+
+{% for key in data %}
+<div class="py-2 px-4 bg-dark text-white mb-3">
+    <strong class="small text-uppercase fw-bold">
+        {{ key.title }}:
+    </strong>
+</div>
+<ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
+    {% for sorter in key.sorters %}
+    <li class="mb-2">
+        <a class="reset-anchor" href="?sort={{ sorter.0 }}">
+            {{ sorter.1 }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endfor %}
