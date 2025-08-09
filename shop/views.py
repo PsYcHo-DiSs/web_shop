@@ -6,7 +6,7 @@ from .models import Category, Product
 
 
 class Index(ListView):
-    """Класс представления главной тсраницы"""
+    """Класс представления главной страницы"""
     model = Category
     context_object_name = 'categories'
     extra_context = {'title': 'Главная страница'}
@@ -62,4 +62,26 @@ class CategoryProductsView(ListView):
         parent_category = self.parent_category
         context['category'] = parent_category
         context['title'] = parent_category.title
+        return context
+
+
+class ProductDetailView(DetailView):
+    """Вывод подробностей о товаре на отдельной странице"""
+
+    model = Product
+    context_object_name = 'product'
+    template_name = 'shop/product_page.html'
+
+    def get_context_data(self, **kwargs):
+        """Вывод на страницу доп элементов"""
+        context = super().get_context_data()
+        product = self.object
+        product.increment_views()
+
+        similar_products = Product.objects.filter(category=product.category).exclude(slug=product.slug)
+
+        context['title'] = product.title
+        context['product'] = product
+        context['similar_products'] = similar_products
+
         return context

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.urls import reverse
 from django.templatetags.static import static
 from django.contrib.auth.models import User
@@ -52,7 +53,12 @@ class Product(models.Model):
     color = models.CharField(max_length=30, default='Серебро', verbose_name='Цвет/Материал')
 
     def get_absolute_url(self):
-        pass
+        return reverse('product_detail', kwargs={'slug': self.slug})
+
+    def increment_views(self):
+        self.watched = F('watched') + 1
+        self.save(update_fields=['watched'])
+        self.refresh_from_db(fields=['watched'])
 
     def get_first_image_or_default(self):
         if self.images.exists():
