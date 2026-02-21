@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.core.cache import cache
 
 from .models import Category, Product
+from .forms import LoginForm, RegistrationForm
 
 
 class Index(ListView):
@@ -85,3 +86,11 @@ class ProductDetailView(DetailView):
         context['similar_products'] = similar_products
 
         return context
+
+
+def login_registration(request):
+    context = {'title': 'Войти или зарегистрироваться',
+               'login_form': LoginForm,
+               'registration_form': RegistrationForm}
+
+    return render(request, 'shop/login_registration.html', context)
