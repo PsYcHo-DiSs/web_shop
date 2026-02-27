@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.core.cache import cache
+from django.contrib.auth import login, logout
+from django.contrib import messages
 
 from .models import Category, Product
 from .forms import LoginForm, RegistrationForm
@@ -94,3 +96,33 @@ def login_registration(request):
                'registration_form': RegistrationForm}
 
     return render(request, 'shop/login_registration.html', context)
+
+
+def user_login(request):
+    """Аутентификация пользователя"""
+    form = LoginForm(data=request.POST)
+    if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        return redirect('index')
+
+    messages.error(request, message='Неверное имя пользователя или пароль')
+    return redirect('login_registration')
+
+
+def user_logout(request):
+    """Выход пользователя"""
+    logout(request)
+    return redirect('index')
+
+
+def user_registration(request):
+    """Регистрация пользователя"""
+    form = RegistrationForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Аккаунт пользователя успешно создан")
+    else:
+        messages.error(request, message='ЧТо то пошло не так')
+
+    return redirect('login_registration')
