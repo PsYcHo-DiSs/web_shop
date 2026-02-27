@@ -10,7 +10,7 @@
     <div class="container d-flex justify-content-around">
         <div class="login">
             <h2 class="form-title">Войти в аккаунт</h2>
-            <form action="" class="login-form" method="post" enctype="multipart/form-data">
+            <form action="{% url 'user_login' %}" class="login-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">{{ login_form.username }} </div>
                 <div class="form-group">{{ login_form.password }} </div>
@@ -20,7 +20,7 @@
 
         <div class="registration">
             <h2 class="form-title">Создать аккаунт</h2>
-            <form action="" class="login-form" method="post" enctype="multipart/form-data">
+            <form action="{% url 'user_registration' %}" class="login-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">{{ registration_form.username }} </div>
                 <div class="form-group">{{ registration_form.email }} </div>
