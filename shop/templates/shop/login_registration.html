@@ -6,6 +6,15 @@
 
 {% block main %}
 <main>
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div><div style="margin-top: 150px;"></div></div>
     <div class="container d-flex justify-content-around">
         <div class="login">
