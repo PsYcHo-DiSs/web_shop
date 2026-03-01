@@ -123,6 +123,7 @@ def user_registration(request):
         form.save()
         messages.success(request, "Аккаунт пользователя успешно создан")
     else:
-        messages.error(request, message='ЧТо то пошло не так')
-
+        for error in form.errors:
+            messages.error(request, form.errors[error].as_text())
+        # messages.error(request, message='Что то пошло не так')
     return redirect('login_registration')
