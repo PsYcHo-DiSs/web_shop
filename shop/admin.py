@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Gallery
+from .models import Category, Product, Gallery, Review
 from django.utils.safestring import mark_safe
 
 
@@ -22,6 +22,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
     get_products_count.short_description = 'Количество товара'
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title', 'category', 'quantity', 'price', 'created_at', 'size', 'color', 'get_product_image')
@@ -30,6 +31,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('title', 'price')
     list_display_links = ('pk', 'title')
     inlines = (GalleryInline,)
+    readonly_fields = ('watched',)
 
     def get_product_image(self, obj):
         if obj.images.all():
@@ -40,3 +42,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Gallery)
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    """Отображение отзывов в админке"""
+    list_display = ('pk', 'author', 'created_at')
+    readonly_fields = ('author', 'text', 'created_at')
