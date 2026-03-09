@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 
 from .models import Category, Product
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ReviewForm
 
 
 class Index(ListView):
@@ -87,6 +87,9 @@ class ProductDetailView(DetailView):
         context['product'] = product
         context['similar_products'] = similar_products
 
+        if self.request.user.is_authenticated:
+            context['review_form'] = ReviewForm
+
         return context
 
 
@@ -127,3 +130,15 @@ def user_registration(request):
             messages.error(request, form.errors[error].as_text())
         # messages.error(request, message='Что то пошло не так')
     return redirect('login_registration')
+
+
+def save_review(request, product_pk):
+    """Сохранить отзыв"""
+    form = ReviewForm(data=request.POST)
+    if form.is_valid():
+        review = form.save(commit=False)
+        review.author = request.user
+        product = Product.objects.get(pk=product_pk)
+        review.product = product
+        review.save()
+        return redirect('product_detail', product.slug)
