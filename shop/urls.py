@@ -9,5 +9,6 @@ urlpatterns = [
     path('login/', user_login, name='user_login'),
     path('logout/', user_logout, name='user_logout'),
     path('registration/', user_registration, name='user_registration'),
+    path('save_review/<int:product_pk>', save_review, name='save_review'),
 
 ]
