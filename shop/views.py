@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.contrib.auth import login, logout
 from django.contrib import messages
 
-from .models import Category, Product
+from .models import Category, Product, Review
 from .forms import LoginForm, RegistrationForm, ReviewForm
 
 
@@ -86,6 +86,9 @@ class ProductDetailView(DetailView):
         context['title'] = product.title
         context['product'] = product
         context['similar_products'] = similar_products
+
+        # получение отзывов, принадлежащих продукту (сортировка по primary key, в обратном порядке)
+        context['reviews'] = Review.objects.filter(product=product).order_by('-pk')
 
         if self.request.user.is_authenticated:
             context['review_form'] = ReviewForm
