@@ -23,14 +23,19 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email')
-        widgets = {'username': forms.TextInput(attrs={'class': 'form-control',
-                                                     'placeholder': 'Имя пользователя'}),
-                  'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Почта'})
-                  }
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя пользователя'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Почта'})
+        }
+
 
 class ReviewForm(forms.ModelForm):
     """Форма для отзыва"""
+
     class Meta:
         model = Review
-        fields = ('text',)
-        widgets = {'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш отзыв...'})}
+        fields = ('text', 'grade')
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш отзыв...'}),
+            'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ваша оценка'})
+        }
