@@ -97,7 +97,7 @@ class Review(models.Model):
         EXCELLENT = 5, 'Отлично'
 
     text = models.TextField(verbose_name='Текст отзыва')
-    grade = models.CharField(max_length=20, choices=Rating.choices, blank=True, null=True, verbose_name='Оценка')
+    grade = models.IntegerField(max_length=20, choices=Rating.choices, blank=True, null=True, verbose_name='Оценка')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата')
