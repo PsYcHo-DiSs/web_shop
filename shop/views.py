@@ -88,10 +88,17 @@ class ProductDetailView(DetailView):
         context['similar_products'] = similar_products
 
         # получение отзывов, принадлежащих продукту (сортировка по primary key, в обратном порядке)
-        context['reviews'] = Review.objects.filter(product=product).order_by('-pk')
+        reviews = Review.objects.filter(product=product).order_by('-pk')
+        context['reviews'] = reviews
+        context['avg_grade'] = 0
+
+        if len(reviews) != 0:
+            total_grade = sum([r.grade for r in reviews])
+            avg_grade = int(total_grade / len(reviews))
+            context['avg_grade'] = avg_grade
 
         if self.request.user.is_authenticated:
-            context['review_form'] = ReviewForm
+            context['review_form'] = ReviewForm()
 
         return context
 
