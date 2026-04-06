@@ -97,7 +97,7 @@ class Review(models.Model):
         EXCELLENT = 5, 'Отлично'
 
     text = models.TextField(verbose_name='Текст отзыва')
-    grade = models.IntegerField(max_length=20, choices=Rating.choices, blank=True, null=True, verbose_name='Оценка')
+    grade = models.IntegerField(choices=Rating.choices, blank=True, null=True, verbose_name='Оценка')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата')
@@ -108,3 +108,15 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+
+class FavouriteProducts(models.Model):
+    """Модель для избранного"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = 'Избранный товар'
+        verbose_name_plural = 'Избранные товары'
