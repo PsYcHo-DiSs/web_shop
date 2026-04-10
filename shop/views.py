@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.contrib.auth import login, logout
 from django.contrib import messages
 
-from .models import Category, Product, Review
+from .models import Category, Product, Review, FavouriteProducts
 from .forms import LoginForm, RegistrationForm, ReviewForm
 
 
@@ -152,3 +152,21 @@ def save_review(request, product_pk):
         review.product = product
         review.save()
         return redirect('product_detail', product.slug)
+
+
+def save_favourite_product(request, product_slug):
+    """добавление или удаление товара с избранных"""
+    user = request.user if request.user.is_authenticated else None
+    product = Product.objects.get(slug=product_slug)
+    favourite_products = FavouriteProducts.objects.filter(user=user)
+    if user:
+        if product in [i.product for i in favourite_products]:
+            fav_product = FavouriteProducts.objects.get(user=user, product=product)
+            fav_product.delete()
+        else:
+            FavouriteProducts.objects.create(user=user, product=product)
+
+        next_page = request.META.get('HTTP_REFERER', 'category_detail')
+        return redirect(next_page)
+
+    return redirect('user_login')
