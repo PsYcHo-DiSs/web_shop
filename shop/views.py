@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.core.cache import cache
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Category, Product, Review, FavouriteProducts
 from .forms import LoginForm, RegistrationForm, ReviewForm
@@ -170,3 +171,17 @@ def save_favourite_product(request, product_slug):
         return redirect(next_page)
 
     return redirect('user_login')
+
+
+class FavouriteProductsView(LoginRequiredMixin, ListView):
+    """Для вывода избранных на странички"""
+    context_object_name = 'products'
+    template_name = 'shop/favourite_products.html'
+    login_url = 'user_registration'
+
+    def get_queryset(self):
+        """Получаем товары конкретного пользователя"""
+        user = self.request.user
+        favs = FavouriteProducts.objects.filter(user=user)
+        products = [i.product for i in favs]
+        return products
