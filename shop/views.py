@@ -4,8 +4,9 @@ from django.core.cache import cache
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.utils import IntegrityError
 
-from .models import Category, Product, Review, FavouriteProducts
+from .models import Category, Product, Review, FavouriteProducts, Mail
 from .forms import LoginForm, RegistrationForm, ReviewForm
 
 
@@ -185,3 +186,16 @@ class FavouriteProductsView(LoginRequiredMixin, ListView):
         favs = FavouriteProducts.objects.filter(user=user)
         products = [i.product for i in favs]
         return products
+
+
+def save_subscribers(request):
+    """Собиратель почтовых адресов"""
+    email = request.POST.get('email')
+    user = request.user if request.user.is_authenticated else None
+    if email:
+        try:
+            Mail.objects.create(mail=email, user=user)
+        except IntegrityError:
+            messages.error(request, message='На данный адрес электронной почты уже осуществлена подписка')
+
+    return redirect('index')
