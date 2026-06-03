@@ -13,6 +13,6 @@ urlpatterns = [
     path('add_favourite/<slug:product_slug>', save_favourite_product, name='add_favourite'),
     path('user_favourites/', FavouriteProductsView.as_view(), name='favourite_product_page'),
     path('save_email/', save_subscribers, name='save_subscribers'),
-
+    path('send_email/', send_mail_to_subscribers, name='send_mail')
 
 ]

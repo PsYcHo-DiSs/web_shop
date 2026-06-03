@@ -199,3 +199,24 @@ def save_subscribers(request):
             messages.error(request, message='На данный адрес электронной почты уже осуществлена подписка')
 
     return redirect('index')
+
+
+def send_mail_to_subscribers(request):
+    """Отправка писем подписчикам"""
+    from conf import settings
+    from django.core.mail import send_mail
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        mail_lists = Mail.objects.values_list('mail', flat=True)
+        for email in mail_lists:
+            send_mail(
+                subject="У нас новая акция",
+                message=text,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            print(f'Сообщение отправлено на почту: {email}>>>>>>>>>> {bool(send_mail)}')
+
+    context = {'title': 'Спамер'}
+    return render(request, 'shop/send_mail.html', context)
