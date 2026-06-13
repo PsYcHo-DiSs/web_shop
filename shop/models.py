@@ -165,6 +165,20 @@ class Order(models.Model):
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 
+    @property
+    def get_cart_total_price(self):
+        """для получения суммы товаров с корзины"""
+        order_products = self.ordered.all()
+        total_price = sum([p.get_order_product_total_price() for p in order_products])
+        return total_price
+
+    @property
+    def get_order_total_qty(self):
+        """для получения общего количества товаров из корзины заказа"""
+        order_products = self.ordered.all()
+        total_qty = sum([p.product_quantity for p in order_products])
+        return total_qty
+
 
 class OrderProduct(models.Model):
     """Заказ"""
@@ -176,3 +190,8 @@ class OrderProduct(models.Model):
     class Meta:
         verbose_name = "Товар в заказе"
         verbose_name_plural = "Товары в заказах"
+
+    @property
+    def get_order_product_total_price(self):
+        """считает total price заказа"""
+        return self.product.price * self.product_quantity
