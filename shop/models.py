@@ -132,3 +132,47 @@ class Mail(models.Model):
     class Meta:
         verbose_name = "Почта"
         verbose_name_plural = "Почты"
+
+
+class Customer(models.Model):
+    """Контактная информация покупателя"""
+    user = models.OneToOneField(User, models.SET_NULL, blank=True, null=True, verbose_name="Пользователь")
+    first_name = models.CharField(max_length=255, verbose_name='Имя')
+    last_name = models.CharField(max_length=255, verbose_name='Фамилия')
+    email = models.EmailField(verbose_name='Почта')
+    phone = models.CharField(max_length=255, verbose_name='Контактный номер')
+
+    def __str__(self):
+        return self.first_name
+
+    class Meta:
+        verbose_name = "Покупатель"
+        verbose_name_plural = "Покупатели"
+
+
+class Order(models.Model):
+    """Корзина покупателя"""
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True,
+                                 verbose_name='Покупатель')
+    order_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания заказа')
+    is_completed = models.BooleanField(default=False, verbose_name='Завершён')
+    shipping = models.BooleanField(default=True, verbose_name='Доставка')
+
+    def __str__(self):
+        return str(self.pk)
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+
+class OrderProduct(models.Model):
+    """Заказ"""
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name="Наименование товара")
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, related_name='ordered')
+    product_quantity = models.IntegerField(default=0, null=True, blank=True, verbose_name="Количество в заказе")
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Товар в заказе"
+        verbose_name_plural = "Товары в заказах"
