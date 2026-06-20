@@ -195,3 +195,22 @@ class OrderProduct(models.Model):
     def get_order_product_total_price(self):
         """считает total price заказа"""
         return self.product.price * self.product_quantity
+
+
+class ShippingAddress(models.Model):
+    """адреса доставки"""
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    created_At = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.street
+
+    class Meta:
+        verbose_name = "Адрес доставки"
+        verbose_name_plural = "Адреса доставки"
+
+
