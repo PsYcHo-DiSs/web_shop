@@ -39,3 +39,17 @@ class ReviewForm(forms.ModelForm):
             'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш отзыв...'}),
             'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ваша оценка'})
         }
+
+
+class CustomerForm(forms.ModelForm):
+    """Форма для контактной информации о заказчике"""
+
+    class Meta:
+        model = Customer
+        fields = ('first_name', 'last_name', 'email', 'phone')
+        widgets = {
+            'first_name': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваше имя...'}),
+            'last_name': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваша фамилия...'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ваша электронная почта...'}),
+            'phone': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш телефон...'})
+        }
