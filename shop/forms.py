@@ -53,3 +53,16 @@ class CustomerForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ваша электронная почта...'}),
             'phone': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш телефон...'})
         }
+
+
+class ShippingForm(forms.ModelForm):
+    """Форма для информации о доставке"""
+
+    class Meta:
+        model = ShippingAddress
+        fields = ('city', 'state', 'street',)
+        widgets = {
+            'city': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш город...'}),
+            'state': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш район...'}),
+            'street': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш адрес...'})
+        }
