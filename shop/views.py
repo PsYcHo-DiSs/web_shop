@@ -7,7 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.utils import IntegrityError
 
 from .models import Category, Product, Review, FavouriteProducts, Mail
-from .forms import LoginForm, RegistrationForm, ReviewForm
+from .forms import (LoginForm, RegistrationForm, ReviewForm,
+                    CustomerForm, ShippingForm)
 
 
 class Index(ListView):
@@ -220,3 +221,13 @@ def send_mail_to_subscribers(request):
 
     context = {'title': 'Спамер'}
     return render(request, 'shop/send_mail.html', context)
+
+
+def cart(request):
+    """Страница корзины"""
+    return render(request, 'shop/cart.html')
+
+
+def to_cart(request, product_id, action):
+    """операция с корзинкой (добавить/удалить)"""
+    return redirect('cart')
