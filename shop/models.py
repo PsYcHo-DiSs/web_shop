@@ -173,7 +173,7 @@ class Order(models.Model):
         return total_price
 
     @property
-    def get_order_total_qty(self):
+    def get_cart_total_qty(self):
         """для получения общего количества товаров из корзины заказа"""
         order_products = self.ordered.all()
         total_qty = sum([p.product_quantity for p in order_products])
