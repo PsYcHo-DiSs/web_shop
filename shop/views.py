@@ -9,6 +9,7 @@ from django.db.utils import IntegrityError
 from .models import Category, Product, Review, FavouriteProducts, Mail
 from .forms import (LoginForm, RegistrationForm, ReviewForm,
                     CustomerForm, ShippingForm)
+from .cart import CartForAuthenticatedUser, get_cart_data
 
 
 class Index(ListView):
@@ -225,9 +226,15 @@ def send_mail_to_subscribers(request):
 
 def cart(request):
     """Страница корзины"""
-    return render(request, 'shop/cart.html')
+    cart_info = get_cart_data(request)
+
+    return render(request, 'shop/cart.html', cart_info)
 
 
 def to_cart(request, product_id, action):
     """операция с корзинкой (добавить/удалить)"""
-    return redirect('cart')
+    if request.user.is_authenticated:
+        CartForAuthenticatedUser(request, product_id=product_id, action=action)
+        return redirect('cart')
+    messages.error(request, message='Авторизуйтесь, чтобы совершать покупки')
+    return redirect('login_registration')
