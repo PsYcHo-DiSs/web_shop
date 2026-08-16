@@ -169,7 +169,7 @@ class Order(models.Model):
     def get_cart_total_price(self):
         """для получения суммы товаров с корзины"""
         order_products = self.ordered.all()
-        total_price = sum([p.get_order_product_total_price() for p in order_products])
+        total_price = sum([p.get_order_product_total_price for p in order_products])
         return total_price
 
     @property
