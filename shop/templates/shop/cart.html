@@ -63,11 +63,10 @@
                         <div class="row align-items-center text-center">
                             <div class="col-md-6 mb-3 mb-md-0 text-md-start"><a
                                     class="btn btn-link p-0 text-dark btn-sm"
-                                    href="shop.html"><i
-                                    class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a></div>
+                                    href="{% url 'index' %}"><i
+                                    class="fas fa-long-arrow-alt-left me-2"> </i>Вернуться к покупкам</a></div>
                             <div class="col-md-6 text-md-end"><a class="btn btn-outline-dark btn-sm"
-                                                                 href="checkout.html">Procceed
-                                to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
+                                                                 href="{% url 'checkout' %}">Оформить заказ<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
                         </div>
                     </div>
                 </div>
