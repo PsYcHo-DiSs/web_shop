@@ -227,8 +227,12 @@ def send_mail_to_subscribers(request):
 def cart(request):
     """Страница корзины"""
     cart_info = get_cart_data(request)
+    context = {
+        'title': 'Корзинка',
+    }
+    context.update(cart_info)
 
-    return render(request, 'shop/cart.html', cart_info)
+    return render(request, 'shop/cart.html', context)
 
 
 def to_cart(request, product_id, action):
@@ -238,3 +242,15 @@ def to_cart(request, product_id, action):
         return redirect('cart')
     messages.error(request, message='Авторизуйтесь, чтобы совершать покупки')
     return redirect('login_registration')
+
+
+def checkout(request):
+    """Страница оформления заказа"""
+    cart_info = get_cart_data(request)
+    context = {
+        'title': 'Оформление заказа',
+        'customer_form': CustomerForm(),
+        'shipping_form': ShippingForm(),
+    }
+    context.update(cart_info)
+    return render(request, 'shop/checkout.html', context)
