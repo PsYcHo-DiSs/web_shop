@@ -48,10 +48,10 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         fields = ('first_name', 'last_name', 'email', 'phone')
         widgets = {
-            'first_name': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваше имя...'}),
-            'last_name': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваша фамилия...'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваше имя...'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваша фамилия...'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ваша электронная почта...'}),
-            'phone': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш телефон...'})
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваш телефон...'})
         }
 
 
@@ -62,7 +62,7 @@ class ShippingForm(forms.ModelForm):
         model = ShippingAddress
         fields = ('city', 'state', 'street',)
         widgets = {
-            'city': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш город...'}),
-            'state': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш район...'}),
-            'street': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ваш адрес...'})
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваш город...'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваш район...'}),
+            'street': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Улица / Дом / Квартира...'})
         }
