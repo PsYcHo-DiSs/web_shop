@@ -226,13 +226,15 @@ def send_mail_to_subscribers(request):
 
 def cart(request):
     """Страница корзины"""
-    cart_info = get_cart_data(request)
-    context = {
-        'title': 'Корзинка',
-    }
-    context.update(cart_info)
-
-    return render(request, 'shop/cart.html', context)
+    if request.user.is_authenticated:
+        cart_info = get_cart_data(request)
+        context = {
+            'title': 'Корзинка',
+        }
+        context.update(cart_info)
+        return render(request, 'shop/cart.html', context)
+    messages.error(request, message='Авторизуйтесь, чтобы получить доступ к вашей корзине')
+    return redirect('login_registration')
 
 
 def to_cart(request, product_id, action):
