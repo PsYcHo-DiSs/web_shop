@@ -4,6 +4,8 @@ from django.template.defaulttags import register as range_register
 from django.core.cache import cache
 from django.db.models import Count, Q
 
+from shop.cart import get_cart_data
+
 register = template.Library()
 
 
@@ -60,3 +62,9 @@ def get_favourite_products(user):
     fav = FavouriteProducts.objects.filter(user=user)
     products = [i.product for i in fav]
     return products
+
+
+@register.simple_tag()
+def get_fav_prods_qty(user):
+    """получение количества товаров в списке избранного"""
+    return len(get_favourite_products(user))

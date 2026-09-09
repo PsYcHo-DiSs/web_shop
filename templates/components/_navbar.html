@@ -1,3 +1,5 @@
+{% load shop_tags %}
+
 <header class="header bg-white">
     <div class="container px-lg-3">
         <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0"><a class="navbar-brand"
@@ -18,8 +20,14 @@
                             class="fas fa-dolly-flatbed me-1 text-gray"></i>Корзина<small
                             class="text-gray fw-normal">(2)</small></a>
                     </li>
+                    {% if request.user.is_authenticated %}
+                        {% get_fav_prods_qty request.user as fav_prods_qty %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'favourite_product_page' %}"> <i class="far fa-heart me-1"></i><small
+                            class="text-gray fw-normal"> ({{ fav_prods_qty }})</small></a></li>
+                    {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'favourite_product_page' %}"> <i class="far fa-heart me-1"></i><small
                             class="text-gray fw-normal"> (0)</small></a></li>
+                    {% endif %}
 
                     {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}"><i class="fas fa-user me-1 text-gray fw-normal"></i>Выйти</a></li>
