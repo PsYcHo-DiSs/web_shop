@@ -68,3 +68,10 @@ def get_favourite_products(user):
 def get_fav_prods_qty(user):
     """получение количества товаров в списке избранного"""
     return len(get_favourite_products(user))
+
+
+@register.simple_tag()
+def get_cart_total_quantity(request):
+    """получение количества единиц товаров в корзине"""
+    cart_total_quantity = get_cart_data(request)['cart_total_quantity']
+    return cart_total_quantity

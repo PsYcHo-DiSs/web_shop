@@ -16,10 +16,19 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
+                    {% if request.user.is_authenticated %}
+                        {% get_cart_total_quantity request as cart_total_quantity %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"> <i
                             class="fas fa-dolly-flatbed me-1 text-gray"></i>Корзина<small
-                            class="text-gray fw-normal">(2)</small></a>
+                            class="text-gray fw-normal">({{ cart_total_quantity }})</small></a>
                     </li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"> <i
+                            class="fas fa-dolly-flatbed me-1 text-gray"></i>Корзина<small
+                            class="text-gray fw-normal">(0)</small></a>
+                    </li>
+                    {% endif %}
+
                     {% if request.user.is_authenticated %}
                         {% get_fav_prods_qty request.user as fav_prods_qty %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'favourite_product_page' %}"> <i class="far fa-heart me-1"></i><small
